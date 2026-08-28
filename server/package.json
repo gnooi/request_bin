@@ -1,0 +1,14 @@
+{
+  "name": "request_bin",
+  "version": "1.0.0",
+  "description": "RequestBin app for team 3!",
+  "license": "ISC",
+  "author": "Team 3 Capstone!",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  }
+}
