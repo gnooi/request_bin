@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS requests, bins, users CASCADE;
+
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	token TEXT NOT NULL UNIQUE
