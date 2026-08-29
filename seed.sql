@@ -12,7 +12,8 @@ TRUNCATE TABLE requests, bins, users RESTART IDENTITY CASCADE;
 INSERT INTO users (token) VALUES
 	('usr_tok_8f3a1c2b9e4d'),   -- id 1
 	('usr_tok_1b7e9f2a3c5d'),   -- id 2
-	('usr_tok_4d2c8a1f6b9e');   -- id 3
+	('usr_tok_4d2c8a1f6b9e'),   -- id 3
+	('usr_tok_7c2e5a9f1d3b');   -- id 4, no bins (for testing "valid token, no bins")
 
 -- ============
 -- Bins
@@ -43,5 +44,6 @@ INSERT INTO requests (bin_id, method, path, headers, body, received_at) VALUES
 	(3, 'DELETE', '/resource/42', '{"host":"bin_i9j0k1l2.requestbin.io","authorization":"Bearer redacted"}', NULL, NOW() - INTERVAL '1 hour');
 
 -- bin 4 (bin_m3n4o5p6) intentionally has no requests yet
+-- user 4 (usr_tok_7c2e5a9f1d3b) intentionally has no bins
 
 COMMIT;
