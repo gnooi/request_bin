@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { pool } = require('../db/postgres');
+const { getPool } = require('../db/postgres');
 const Request = require('../../models/RequestPayload');
 // const { broadcastToBin } = require('../ws');
 
@@ -19,7 +19,7 @@ router.all('/:bin_name', async (req, res) => {
 
     const binId = binResult.rows[0].id;
 
-    const insertResult = await pool.query(
+    const insertResult = await getPool.query(
       `INSERT INTO requests (bin_id, method, path, headers, body)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, received_at`,
@@ -33,7 +33,7 @@ router.all('/:bin_name', async (req, res) => {
     );
     const { id: requestId, received_at } = insertResult.rows[0];
 
-    await pool.query(
+    await getPool.query(
       'UPDATE bins SET request_count = request_count + 1 WHERE id = $1',
       [binId],
     );
@@ -68,7 +68,7 @@ router.get('/api/bins/:bin_name/requests', async (req, res) => {
   const { bin_name } = req.params;
 
   try {
-    const binResult = await pool.query(
+    const binResult = await getPool.query(
       'SELECT id FROM bins WHERE bin_name = $1',
       [bin_name],
     );
@@ -79,7 +79,7 @@ router.get('/api/bins/:bin_name/requests', async (req, res) => {
 
     const binId = binResult.rows[0].id;
 
-    const requestsResult = await pool.query(
+    const requestsResult = await getPool.query(
       `SELECT id, method, path, received_at 
       FROM requests
       WHERE bin_id = $1
