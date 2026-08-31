@@ -1,4 +1,4 @@
-const { clientPromise } = require('../db/db')
+const { findBinByName } = require('../models/bin')
 
 const {
     ValidationError,
@@ -18,7 +18,7 @@ async function validateEndpoint(endpoint) {
     } else if (!await isUnique(endpoint)) {
         throw new NotUniqueError('Endpoint is taken, please choose another')
     }
-    
+
     return true
 }
 
@@ -27,19 +27,8 @@ function hasValidChars(str) {
 }
 
 async function isUnique(endpoint) {
-    const client = await clientPromise
-    const bin_exists_query = {
-        name: 'check if endpoint exists in bins',
-        text: 'SELECT * FROM bins WHERE bin_name = $1',
-        values: [endpoint]
-    }
-
-    const bin_exists = await client.query(bin_exists_query)
-
-    if (bin_exists.rowCount !== 0) {
-        return false
-    }
-    return true
+    const matches = await findBinByName(endpoint)
+    return matches.length === 0
 }
 
 module.exports = {

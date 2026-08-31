@@ -1,4 +1,4 @@
-const { clientPromise } = require('../db/db')
+const { clientPromise } = require('../db/postgres')
 const { AuthorizationError } = require('../utils/errors')
 
 async function authenticate(req, res, next) {
@@ -16,21 +16,21 @@ async function authenticate(req, res, next) {
   }
 
   const client = await clientPromise
-  const id_query = {
+  const idQuery = {
     name: 'fetch_user_id',
     text: `SELECT users.id FROM users WHERE users.token = $1`,
     values: [token]
   }
 
-  const id_query_result = await client.query(id_query)
-  const user_id =  id_query_result.rows.length == 0 ? -1 : id_query_result.rows[0].id;
+  const idQueryResult = await client.query(idQuery)
+  const userId = idQueryResult.rows.length == 0 ? -1 : idQueryResult.rows[0].id;
 
-  if (user_id === -1) {
+  if (userId === -1) {
     throw new AuthorizationError("Sorry we don't have any bins for that token")
   };
 
-  // assigning the user_id to the request object and passing it to the next handler which is bins_controller.js
-  req.user_id = user_id
+  // assigning the userId to the request object and passing it to the next handler which is binsController.js
+  req.userId = userId
   next()
 }
 
