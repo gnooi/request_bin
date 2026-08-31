@@ -1,6 +1,5 @@
 const { getPool } = require('../db/postgres');
 const Request = require('../../models/RequestPayload');
-// const { broadcastToBin } = require('../ws');
 
 async function recordRequest(req, res) {
   const { bin_name } = req.params;
@@ -18,43 +17,37 @@ async function recordRequest(req, res) {
 
     const binId = binResult.rows[0].id;
 
-    const insertResult = await pool.query(
-      `INSERT INTO requests (bin_id, method, path, headers, body)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, received_at`,
+    const idResult = await pool.query(
+      "SELECT nextval('requests_id_seq') AS id",
+    );
+    const requestId = Number(idResult.rows[0].id);
+    const receivedAt = new Date();
+
+    await Request.create({
+      _id: requestId,
+      bin_id: String(binId),
+      request_payload: req.rawText,
+    });
+
+    await pool.query(
+      `INSERT INTO requests (id, bin_id, method, path, headers, body)
+      VALUES ($1, $2, $3, $4, $5, $6)`,
       [
+        requestId,
         binId,
         req.method,
-        req.path,
+        req.originalUrl,
         JSON.stringify(req.headers),
-        typeof req.body === 'string' ? req.body : JSON.stringify(req.body),
+        req.parsedBody !== undefined
+          ? JSON.stringify(req.parsedBody)
+          : req.rawText,
       ],
     );
-    const { id: requestId, received_at } = insertResult.rows[0];
 
     await pool.query(
       'UPDATE bins SET request_count = request_count + 1 WHERE id = $1',
       [binId],
     );
-
-    await Request.create({
-      _id: requestId,
-      bin_id: String(binId),
-      request_payload: {
-        method: req.method,
-        path: req.path,
-        headers: req.headers,
-        body: req.body,
-        received_at,
-      },
-    });
-
-    // broadcastToBin(bin_name, {
-    //   id: requestId,
-    //   method: req.method,
-    //   path: req.path,
-    //   received_at,
-    // });
 
     res.status(200).json({ received: true });
   } catch (err) {
