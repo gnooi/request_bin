@@ -1,11 +1,11 @@
-
+import HomePage from "./components/HomePage.jsx";
 function App() {
 
-  return (
-    <div>
-      Yay!!
-    </div>
-  )
+	return (
+		<div>
+			<HomePage />
+		</div>
+	)
 }
 
-export default App
+export default App;
