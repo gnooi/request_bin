@@ -23,10 +23,18 @@ async function recordRequest(req, res) {
     const requestId = Number(idResult.rows[0].id);
     const receivedAt = new Date();
 
+    const requestPayload = {
+      method: req.method,
+      path: req.originalUrl,
+      headers: req.headers,
+      body: req.rawText ?? null,
+      received_at: receivedAt,
+    };
+
     await Request.create({
       _id: requestId,
       bin_id: String(binId),
-      request_payload: req.rawText,
+      request_payload: requestPayload,
     });
 
     await pool.query(
@@ -62,7 +70,7 @@ async function getBinRequests(req, res) {
 
   try {
     const binResult = await pool.query(
-      'SELECT id FROM bins WHERE bin_name = $1',
+      'SELECT id, user_id FROM bins WHERE bin_name = $1',
       [bin_name],
     );
 
@@ -70,14 +78,18 @@ async function getBinRequests(req, res) {
       return res.status(404).json({ error: 'Bin not found' });
     }
 
-    const binId = binResult.rows[0].id;
+    const bin = binResult.rows[0];
+
+    if (bin.user_id !== req.userId) {
+      return res.status(403).json({ error: 'Not authorized for this bin' });
+    }
 
     const requestsResult = await pool.query(
       `SELECT id, method, path, received_at 
       FROM requests
       WHERE bin_id = $1
       ORDER BY received_at DESC`,
-      [binId],
+      [bin.id],
     );
 
     res.status(200).json(requestsResult.rows);
@@ -99,7 +111,7 @@ async function getRawRequest(req, res) {
 
   try {
     const binResult = await pool.query(
-      'SELECT id FROM bins WHERE bin_name = $1',
+      'SELECT id, user_id FROM bins WHERE bin_name = $1',
       [bin_name],
     );
 
@@ -107,11 +119,15 @@ async function getRawRequest(req, res) {
       return res.sendStatus(404);
     }
 
-    const binId = binResult.rows[0].id;
+    const bin = binResult.rows[0];
+
+    if (bin.user_id !== req.userId) {
+      return res.status(403).json({ error: 'Not authorized for this bin' });
+    }
 
     const doc = await Request.findOne({ _id: numericId });
 
-    if (!doc || doc.bin_id !== String(binId)) {
+    if (!doc || doc.bin_id !== String(bin.id)) {
       return res.sendStatus(404);
     }
 
