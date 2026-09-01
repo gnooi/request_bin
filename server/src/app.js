@@ -1,24 +1,24 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const cors = require('cors');
+const app = express();
 
-const { requestRouter } = require('./routes/requestRouter.js')
-const { authenticate } = require('./middleware/authenticate.js')
-const { errorHandler } = require('./middleware/errorHandler.js')
+const { requestRouter } = require('./routes/requestRouter.js');
+const requestsRoutes = require('./routes/requests');
+const { authenticate } = require('./middleware/authenticate.js');
+const { errorHandler } = require('./middleware/errorHandler.js');
 
-app.use(express.json())
+app.use(cors());
 
-app.get('/' , () => {
-  console.log('I am getting to home')
-})
+app.get('/', (req, res) => {
+  res.send('Request Bin API');
+});
 
-app.use('/api/bins', authenticate, requestRouter)
+// Pair B: webhook capture + request listing
+app.use('/', requestsRoutes);
 
-app.use(errorHandler)
+// Pair A: bin/user management — needs parsed JSON bodies
+app.use('/api/bins', express.json(), authenticate, requestRouter);
 
-module.exports = { app }
+app.use(errorHandler);
 
-
-
-
-
-
+module.exports = { app };
