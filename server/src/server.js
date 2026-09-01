@@ -1,7 +1,6 @@
-const express = require('express')
-const app = express()
+const { app } = require('./app')
 
 const PORT = 3000
 app.listen(PORT, () => {
-    console.log(`We are runninggggg!!!!! app running on port: ${PORT}`)
+  console.log(`We are runningggggg!!! app running on port: ${PORT}!!!!!`)
 })
