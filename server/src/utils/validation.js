@@ -23,7 +23,7 @@ async function validateEndpoint(endpoint) {
 }
 
 function hasValidChars(str) {
-    return /^[a-zA-Z0-9_]+$/.test(str)
+    return /^[a-zA-Z0-9_-]+$/.test(str)
 }
 
 async function isUnique(endpoint) {
