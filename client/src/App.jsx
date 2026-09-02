@@ -1,9 +1,15 @@
+import { Routes, Route } from "react-router-dom";
 import HomePage from "./components/HomePage.jsx";
+import BinDetails from "./components/BinDetails.jsx";
+
 function App() {
 
 	return (
 		<div>
-			<HomePage />
+			<Routes>
+				<Route path="/" element={<HomePage />} />
+				<Route path="/bins" element={<BinDetails />} />
+			</Routes>
 		</div>
 	)
 }

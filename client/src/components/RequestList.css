@@ -1,0 +1,66 @@
+.bin-details__requests {
+	flex-basis: 36%;
+	border-right: 1px solid #e6e7ec;
+	padding: 24px;
+}
+
+.bin-details__search {
+	display: block;
+	width: 100%;
+	padding: 10px 14px;
+	font-size: 14px;
+	color: #14141a;
+	background: #ffffff;
+	border: 1px solid #e6e7ec;
+	border-radius: 8px;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+}
+
+.bin-details__search::placeholder {
+	color: #9295a1;
+}
+
+.bin-details__methods {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+.method-badge {
+	padding: 6px 14px;
+	font-size: 13px;
+	font-weight: 600;
+	border-radius: 999px;
+	border: 1px solid #e6e7ec;
+	background: #ffffff;
+	color: #6b7280;
+	cursor: pointer;
+}
+
+.method-badge--active {
+	background: #6c4cf0;
+	border-color: #6c4cf0;
+	color: #ffffff;
+}
+
+.method-badge--get {
+	color: #1a9c6b;
+	border-color: #cdeee0;
+}
+
+.method-badge--post {
+	color: #e0245e;
+	border-color: #fad3e0;
+}
+
+.method-badge--put {
+	color: #2f6fed;
+	border-color: #d3e0fc;
+}
+
+.method-badge--delete {
+	color: #d92d20;
+	border-color: #f9d4d1;
+}

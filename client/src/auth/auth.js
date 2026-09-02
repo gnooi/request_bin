@@ -21,6 +21,7 @@ export function clearStoredToken() {
 // need to create a `api/auth/new` endpoint
 // that creates a new user with new token and returns a token
 async function issueToken() {
+
     const res = await axios.post(NEW_TOKEN_URL)
     const { token } = res.data
     setStoredToken(token)
@@ -34,10 +35,15 @@ export function bootstrapToken() {
     }
 
     if (!tokenPromise) {
-        tokenPromise = issueToken().finally(() => {
-            // why does this happen?
-            tokenPromise = null
-        })
+        tokenPromise = issueToken()
+            .catch((err) => {
+                console.warn('bootstrapToken: failed to issue auth token, continuing without one', err)
+                return null
+            })
+            .finally(() => {
+                // why does this happen?
+                tokenPromise = null
+            })
     }
 
     return tokenPromise
