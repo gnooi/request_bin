@@ -1,77 +1,83 @@
-import axios from 'axios'
+import axios from "axios";
 
 // hash this? for security
-const TOKEN_KEY = 'auth_token'
-const NEW_TOKEN_URL = 'http://localhost:3000/api/auth/new'
+const TOKEN_KEY = "auth_token";
+const NEW_TOKEN_URL = "http://localhost:3000/api/auth/new";
 
-let tokenPromise = null
+let tokenPromise = null;
 
 export function getStoredToken() {
-    return localStorage.getItem(TOKEN_KEY)
+  return localStorage.getItem(TOKEN_KEY);
 }
 
 export function setStoredToken(token) {
-    localStorage.setItem(TOKEN_KEY, token)
+  localStorage.setItem(TOKEN_KEY, token);
 }
 
 export function clearStoredToken() {
-    localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(TOKEN_KEY);
 }
 
 // need to create a `api/auth/new` endpoint
 // that creates a new user with new token and returns a token
 async function issueToken() {
-    const res = await axios.post(NEW_TOKEN_URL)
-    const { token } = res.data
-    setStoredToken(token)
-    return token
+  const res = await axios.post(NEW_TOKEN_URL);
+  const { token } = res.data;
+  setStoredToken(token);
+  return token;
 }
 
 export function bootstrapToken() {
-    const existing = getStoredToken()
-    if (existing) {
-        return existing
-    }
+  const existing = getStoredToken();
+  if (existing) {
+    return existing;
+  }
 
-    if (!tokenPromise) {
-        tokenPromise = issueToken().finally(() => {
-            // why does this happen?
-            tokenPromise = null
-        })
-    }
+  if (!tokenPromise) {
+    tokenPromise = issueToken()
+      .catch((err) => {
+        console.warn(
+          "bootstrapToken: failed to issue auth token, continuing without one",
+          err,
+        );
+        return null;
+      })
+      .finally(() => {
+        // why does this happen?
+        tokenPromise = null;
+      });
+  }
 
-    return tokenPromise
+  return tokenPromise;
 }
 
 function addAuthHeaderToRequests(config) {
-    const token = getStoredToken()
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
+  const token = getStoredToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 }
 
 function passThroughResponse(response) {
-    return response
+  return response;
 }
 
 async function retryWithFreshToken(error) {
-    const original = error.config
+  const original = error.config;
 
-    if (error.response?.status === 401 && !original._retried) {
-        original._retried = true
-        clearStoredToken()
-        const token = await bootstrapToken()
-        original.headers.Authorization = `Bearer ${token}`
-        return axios(original)
-    }
+  if (error.response?.status === 401 && !original._retried) {
+    original._retried = true;
+    clearStoredToken();
+    const token = await bootstrapToken();
+    original.headers.Authorization = `Bearer ${token}`;
+    return axios(original);
+  }
 
-    return Promise.reject(error)
+  return Promise.reject(error);
 }
 
-axios.interceptors.request.use(addAuthHeaderToRequests)
+axios.interceptors.request.use(addAuthHeaderToRequests);
 
-axios.interceptors.response.use(
-    passThroughResponse,
-    retryWithFreshToken,
-)
+axios.interceptors.response.use(passThroughResponse, retryWithFreshToken);
+
