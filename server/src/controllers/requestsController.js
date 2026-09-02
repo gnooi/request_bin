@@ -61,6 +61,7 @@ async function recordRequest(req, res) {
       [binId],
     );
 
+    // new request is sent over the web socket connection
     const io = req.app.get('io');
     io.to(bin_name).emit('new-request', {
       id: requestId,
