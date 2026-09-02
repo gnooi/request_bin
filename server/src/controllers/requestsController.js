@@ -84,8 +84,9 @@ async function getBinRequests(req, res) {
       return res.status(403).json({ error: 'Not authorized for this bin' });
     }
 
+    // headers too
     const requestsResult = await pool.query(
-      `SELECT id, method, path, received_at 
+      `SELECT id, method, path, headers, received_at 
       FROM requests
       WHERE bin_id = $1
       ORDER BY received_at DESC`,
