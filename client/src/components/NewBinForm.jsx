@@ -70,17 +70,4 @@ const NewBin = () => {
 	);
 };
 
-const Bin = () => {
-
-};
-
-const MyBins = () => {
-	return (
-		<div>
-			<h2>My Bins:</h2>
-			<p></p>
-		</div>
-	);
-};
-
 export default NewBin;

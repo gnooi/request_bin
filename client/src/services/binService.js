@@ -1,9 +1,18 @@
 import axios from "axios";
 const baseURL = "http://localhost:3000/api/bins";
 
-async function getAllBins() {
-  const bins = await axios.get(baseURL);
-  return bins.data;
+// adding try/catch and token
+async function getAllBins(token) {
+  try {
+    const { data } = await axios.get(baseURL, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return data;
+  } catch (err) {
+    console.error("Failed to fetch bins:", err.message);
+    throw err;
+  }
 }
 
 // Add a try/catch
