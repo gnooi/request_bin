@@ -151,3 +151,12 @@
 	display: flex;
 	min-height: 560px;
 }
+
+.bin-details__status {
+	padding: 40px;
+	color: #9295a1;
+	font-size: 14px;
+	font-style: italic;
+	text-align: center;
+	width: 100%;
+}

@@ -32,8 +32,17 @@ const formatRawRequest = (request, parsedHeaders) => {
 };
 
 const RequestDetail = ({ request }) => {
-	const headers = parseHeaders(request.headers);
 	const [activeTab, setActiveTab] = useState("headers");
+
+	if (!request) {
+		return (
+			<section className="bin-details__request-detail" aria-label="Request detail">
+				<p className="request-detail__empty">Select a request to view its details.</p>
+			</section>
+		);
+	}
+
+	const headers = parseHeaders(request.headers);
 
 	return (
 		<section className="bin-details__request-detail" aria-label="Request detail">

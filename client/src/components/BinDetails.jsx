@@ -1,40 +1,25 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./BinDetails.css";
 import RequestList from "./RequestList.jsx";
 import RequestDetail from "./RequestDetail.jsx";
-
-// Example requests shaped like rows from the Postgres `requests` table, for layout preview only.
-const EXAMPLE_REQUESTS = [
-	{
-		id: 1,
-		bin_id: 12,
-		method: "POST",
-		path: "/api/v1/webhooks/stripe",
-		headers: '{"content-type":"application/json"}',
-		body: '{"event":"payment_success"}',
-		received_at: new Date(Date.now() - 23 * 1000).toISOString(),
-	},
-	{
-		id: 2,
-		bin_id: 12,
-		method: "GET",
-		path: "/v1/charges",
-		headers: '{"accept":"*/*"}',
-		body: null,
-		received_at: new Date(Date.now() - 4 * 60 * 1000).toISOString(),
-	},
-	{
-		id: 3,
-		bin_id: 12,
-		method: "PUT",
-		path: "/v1/customers/42",
-		headers: '{"content-type":"application/json"}',
-		body: '{"name":"Jane Doe"}',
-		received_at: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-	},
-];
+import binService from "../services/binService.js";
 
 const BinDetails = () => {
-	const selectedRequest = EXAMPLE_REQUESTS[0];
+	const { endpoint } = useParams();
+	const [requests, setRequests] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		setLoading(true);
+		setError(null);
+
+		binService.getAllRequests(endpoint)
+			.then(setRequests)
+			.catch(() => setError("Failed to load requests for this bin."))
+			.finally(() => setLoading(false));
+	}, [endpoint]);
 
 	return (
 		<div className="bin-details-page">
@@ -58,10 +43,10 @@ const BinDetails = () => {
 						<div className="bin-details__info-left">
 							<a className="bin-details__back" href="/">← Back to bins</a>
 							<div className="bin-details__title-row">
-								<h1 className="bin-details__title">Bin name</h1>
+								<h1 className="bin-details__title">{endpoint}</h1>
 								<button className="bin-details__button" type="button">Copy endpoint</button>
 							</div>
-							<span className="bin-details__endpoint">rbn.dev/b/xxxxx</span>
+							<span className="bin-details__endpoint">{endpoint}</span>
 						</div>
 						<div className="bin-details__info-right">
 							<button className="bin-details__button bin-details__button--icon" type="button" aria-label="More options">
@@ -71,8 +56,14 @@ const BinDetails = () => {
 					</div>
 
 					<div className="bin-details__body">
-						<RequestList requests={EXAMPLE_REQUESTS} selectedRequestId={selectedRequest.id} />
-						<RequestDetail request={selectedRequest} />
+						{loading && <p className="bin-details__status">Loading requests…</p>}
+						{!loading && error && <p className="bin-details__status">{error}</p>}
+						{!loading && !error && (
+							<>
+								<RequestList requests={requests} selectedRequestId={null} />
+								<RequestDetail request={null} />
+							</>
+						)}
 					</div>
 				</div>
 			</main>
