@@ -53,12 +53,11 @@ const formatRelativeTime = (timestamp) => {
 const MyBins = () => {
 	const [myBins, setMyBins] = useState([]);
 	const [copiedId, setCopiedId] = useState(null);
-	const token = '';
 
 	useEffect(() => {
 		setMyBins(dummyBins);
 		//		binService
-		//			.getAllBins(token)
+		//			.getAllBins()
 		//			.then(data => setMyBins(data));
 	}, []);
 

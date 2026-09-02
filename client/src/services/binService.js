@@ -1,45 +1,33 @@
-import axios from "axios";
-const baseURL = "http://localhost:3000/api/bins";
+import axios from 'axios'
 
-// adding try/catch and token
-async function getAllBins(token) {
-  try {
-    const { data } = await axios.get(baseURL, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+const baseURL = 'http://localhost:3000/api/bins'
 
-    return data;
-  } catch (err) {
-    console.error("Failed to fetch bins:", err.message);
-    throw err;
-  }
+async function getAllBins() {
+    const bins = await axios.get(baseURL)
+    return bins.data
 }
 
-// Add a try/catch
 async function postBin(endpoint) {
-  const addedBin = await axios.post(baseURL, {
-    url_endpoint: endpoint,
-  });
-
-  return addedBin.data;
+    const addedBin = await axios.post(baseURL, {
+        url_endpoint: endpoint
+    })
+    return addedBin.data
 }
 
 async function getAllRequests(endpoint) {
-  const requests = await axios.get(`${baseURL}/${endpoint}/requests`);
-  return requests.data;
+    const requests = await axios.get(`${baseURL}/${endpoint}/requests`)
+    return requests.data
 }
 
 // get request by id
 async function getRequestById(endpoint, requestId) {
-  const request = await axios.get(
-    `${baseURL}/${endpoint}/requests/${requestId}`,
-  );
-  return request.data;
+    const request = await axios.get(`${baseURL}/${endpoint}/requests/${requestId}`)
+    return request.data
 }
 
 export default {
-  getAllBins,
-  postBin,
-  getAllRequests,
-  getRequestById,
-};
+    getAllBins,
+    postBin,
+    getAllRequests,
+    getRequestById,
+}
