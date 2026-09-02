@@ -4,9 +4,11 @@ require('dotenv').config({
 
 const http = require('http');
 const { Server } = require('socket.io');
+const cron = require('node-cron');
 const { app } = require('./app');
 const { connectPostgres, getPool } = require('./db/postgres');
 const connectMongo = require('./db/mongo.js');
+const { purgeOldRequests } = require('./jobs/cleanup');
 
 const PORT = process.env.PORT || 3000;
 
@@ -68,6 +70,15 @@ const start = async () => {
 
   httpServer.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
+  });
+
+  // purges at 3AM every day
+  cron.schedule('0 3 * * *', async () => {
+    try {
+      await purgeOldRequests();
+    } catch (e) {
+      console.error(`Scheduled purge failed: ${e}`);
+    }
   });
 };
 
