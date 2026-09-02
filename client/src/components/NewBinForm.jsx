@@ -21,7 +21,7 @@ const isValidBinName = (binName) => {
 	return VALID_BIN_NAME.test(binName);
 }
 
-const NewBin = () => {
+const NewBin = ({ onBinCreated }) => {
 	const [binName, setBinName] = useState(generateRandomName);
 
 	const submitBinName = async (event) => {
@@ -34,16 +34,13 @@ const NewBin = () => {
 		}
 
 		try {
-			const result = await binService.postBin(binName);
-			// if successful, update my bins sidebar
+			await binService.postBin(binName);
+			setBinName(generateRandomName());
+			if (onBinCreated) onBinCreated();
 		} catch (err) {
 			console.error(err);
 			alert(`Failed to create bin: ${binName} - bin already exists`);
 			setBinName(generateRandomName());
-
-			// May want to be more specific with error handling.
-			//	* if name already exists, use above alert
-			//	* otherwise, specify a network error, etc.
 		}
 	};
 

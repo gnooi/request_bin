@@ -1,42 +1,6 @@
 import { useState, useEffect } from "react";
 import binService from "../services/binService.js";
 import { DOMAIN } from "../config.js";
-import { dummyBins } from "./dummyBins.js";
-
-// get all bins for a particular use (by token)
-// if new user or no bin, My Bins: You have no bins yet
-
-// front end req to server
-// async function getAllBins(token) {
-//   try {
-//     const { data } = await axios.get(baseURL, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-// 
-//     return data;
-//   } catch (err) {
-//     console.error("Failed to fetch bins:", err.message);
-//     throw err;
-//   }
-// }
-
-// backend controller:
-// async function getBins(req, res) {
-//   const userId = req.userId
-// 
-//   const rows = await findBinsByUserId(userId)
-// 
-//   const bins = rows.map(
-//     ({ id, bin_name, request_count, created_at }) => ({
-//       id,
-//       bin_name,
-//       request_count,
-//       created_at
-//     })
-//   )
-// 
-//   return res.status(200).json(bins)
-// }
 
 const formatRelativeTime = (timestamp) => {
 	if (!timestamp) return "Never";
@@ -50,16 +14,16 @@ const formatRelativeTime = (timestamp) => {
 	return `${Math.floor(diffHr / 24)}d ago`;
 };
 
-const MyBins = () => {
+const MyBins = ({ refreshKey }) => {
 	const [myBins, setMyBins] = useState([]);
 	const [copiedId, setCopiedId] = useState(null);
 
 	useEffect(() => {
-		setMyBins(dummyBins);
-		//		binService
-		//			.getAllBins()
-		//			.then(data => setMyBins(data));
-	}, []);
+		binService
+			.getAllBins()
+			.then(data => setMyBins(data))
+			.catch(err => console.error("Failed to fetch bins:", err));
+	}, [refreshKey]);
 
 	const copyEndpoint = async (id, binName) => {
 		try {
@@ -101,7 +65,7 @@ const MyBins = () => {
 									{copiedId === id ? "Copied" : "Copy"}
 								</button>
 								<a
-									href={`/bins/${bin_name}/requests`}
+									href={`${DOMAIN}/bins/${bin_name}/requests`}
 									className="chevron"
 									aria-label={`View ${bin_name}`}
 								>
