@@ -57,6 +57,15 @@ async function recordRequest(req, res) {
       [binId],
     );
 
+    const io = req.app.get('io');
+    io.to(bin_name).emit('new-request', {
+      id: requestId,
+      bin_id: binId,
+      method: req.method,
+      path: req.originalUrl,
+      received_at: receivedAt,
+    });
+
     res.status(200).json({ received: true });
   } catch (err) {
     console.error('Error capturing request:', err);
@@ -84,7 +93,6 @@ async function getBinRequests(req, res) {
       return res.status(403).json({ error: 'Not authorized for this bin' });
     }
 
-    // headers too
     const requestsResult = await pool.query(
       `SELECT id, method, path, headers, received_at 
       FROM requests
