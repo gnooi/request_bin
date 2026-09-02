@@ -1,8 +1,8 @@
 import { useState } from "react";
 import binService from "../services/binService.js";
+import { DOMAIN } from "../config.js";
 
 const BIN_NAME_LENGTH = 7;
-const DOMAIN = "https://ngrokPointingToLocalHost:3000/"
 const VALID_BIN_NAME = /^[\w\d\-_\.]{1,50}$/;
 
 const generateRandomName = () => {
@@ -48,13 +48,13 @@ const NewBin = () => {
 	};
 
 	return (
-		<div>
+		<div className="card new-bin-card">
 			<h1>New Bin</h1>
 			<p>Create a bin to collect and inspect HTTP reqests.</p>
 			<form id="create_bin" onSubmit={submitBinName}>
 				<label htmlFor="bin_name">
 					<span id="base_uri">
-						{DOMAIN}
+						{`${DOMAIN}/`}
 					</span>
 					<input
 						id="bin_name"

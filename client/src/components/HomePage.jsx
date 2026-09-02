@@ -3,7 +3,7 @@ import MyBins from "./MyBins";
 
 const HomePage = () => {
 	return (
-		<div>
+		<div className="page">
 			<NewBin />
 			<MyBins />
 		</div>

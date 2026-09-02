@@ -1,0 +1,272 @@
+:root {
+	--bg: #f6f6fb;
+	--card-bg: #ffffff;
+	--border: #e6e6ee;
+	--text-primary: #18181b;
+	--text-secondary: #6b7280;
+	--accent: #6d5ffc;
+	--accent-hover: #5a4be0;
+	--accent-soft: #f0eefe;
+	--radius-lg: 16px;
+	--radius-md: 10px;
+	--shadow-card: 0 1px 2px rgba(16, 16, 40, 0.04), 0 8px 24px rgba(16, 16, 40, 0.04);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: var(--bg);
+	color: var(--text-primary);
+	font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+	margin: 0;
+}
+
+.page {
+	max-width: 640px;
+	margin: 0 auto;
+	padding: 64px 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.card {
+	background: var(--card-bg);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-card);
+	padding: 32px;
+}
+
+/* --- New Bin card --- */
+
+.new-bin-card h1 {
+	font-size: 22px;
+	font-weight: 700;
+	margin: 0 0 6px;
+	letter-spacing: -0.01em;
+}
+
+.new-bin-card p {
+	font-size: 14px;
+	color: var(--text-secondary);
+	margin: 0 0 24px;
+}
+
+#create_bin {
+	display: flex;
+	gap: 12px;
+	align-items: stretch;
+}
+
+#create_bin label {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-md);
+	background: #fafafd;
+	overflow: hidden;
+}
+
+#create_bin label:focus-within {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+#base_uri {
+	padding: 0 0 0 14px;
+	font-size: 14px;
+	color: var(--text-secondary);
+	white-space: nowrap;
+}
+
+#bin_name {
+	flex: 1;
+	min-width: 0;
+	border: none;
+	background: transparent;
+	padding: 12px 14px 12px 4px;
+	font-size: 14px;
+	color: var(--text-primary);
+	outline: none;
+}
+
+#bin_name::placeholder {
+	color: #a1a1aa;
+}
+
+#create_bin button {
+	border: none;
+	border-radius: var(--radius-md);
+	background: var(--accent);
+	color: #fff;
+	font-size: 14px;
+	font-weight: 600;
+	padding: 0 22px;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+#create_bin button:hover {
+	background: var(--accent-hover);
+}
+
+#create_bin button:active {
+	transform: translateY(1px);
+}
+
+/* --- My Bins card --- */
+
+.my-bins-card {
+	padding: 0;
+	overflow: hidden;
+}
+
+.my-bins-card h2 {
+	font-size: 16px;
+	font-weight: 700;
+	margin: 0;
+	padding: 20px 24px;
+	background: #fafafd;
+	border-bottom: 1px solid var(--border);
+}
+
+.my-bins {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.bin-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 0 20px;
+	border-bottom: 1px solid var(--border);
+	transition: background-color 0.12s ease;
+}
+
+.bin-row:last-child {
+	border-bottom: none;
+}
+
+.bin-row:hover {
+	background: #fafafd;
+}
+
+.bin-row-main {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 18px 0;
+	text-decoration: none;
+	color: inherit;
+}
+
+.bin-row-name {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.bin-name {
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--text-primary);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.bin-endpoint {
+	display: inline-block;
+	width: fit-content;
+	max-width: 100%;
+	font-family: "SFMono-Regular", ui-monospace, Menlo, monospace;
+	font-size: 12px;
+	color: var(--accent-hover);
+	background: var(--accent-soft);
+	padding: 2px 8px;
+	border-radius: 6px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.bin-row-stat {
+	flex-shrink: 0;
+	width: 96px;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.stat-value {
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--text-primary);
+}
+
+.stat-label {
+	font-size: 12px;
+	color: var(--text-secondary);
+}
+
+.copy-button {
+	flex-shrink: 0;
+	border: 1px solid var(--border);
+	background: #fff;
+	color: var(--text-primary);
+	font-size: 13px;
+	font-weight: 600;
+	padding: 8px 14px;
+	border-radius: var(--radius-md);
+	cursor: pointer;
+	transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.copy-button:hover {
+	border-color: var(--accent);
+	color: var(--accent);
+}
+
+.chevron {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	color: var(--text-secondary);
+	text-decoration: none;
+}
+
+.chevron svg {
+	width: 18px;
+	height: 18px;
+}
+
+.chevron:hover {
+	color: var(--text-primary);
+}
+
+.bin-row .empty,
+.my-bins>.empty {
+	padding: 20px 24px;
+	font-size: 14px;
+	color: var(--text-secondary);
+	border-bottom: none;
+}
+
+@media (max-width: 480px) {
+	.bin-row-stat {
+		display: none;
+	}
+}
