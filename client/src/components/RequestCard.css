@@ -1,0 +1,65 @@
+.request-card {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	padding: 12px 14px;
+	background: none;
+	border: 1px solid transparent;
+	border-radius: 8px;
+	margin-bottom: 6px;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition: background-color 0.12s ease;
+}
+
+.request-card:hover:not(.request-card--selected) {
+	background: #f8f8fa;
+}
+
+.request-card--selected {
+	background: #f2effe;
+	border-color: #d9cffb;
+	border-left: 3px solid #6c4cf0;
+	padding-left: 12px;
+}
+
+.request-card__method {
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 12px;
+	font-weight: 700;
+	flex-shrink: 0;
+}
+
+.request-card__method--get {
+	color: #1a9c6b;
+}
+
+.request-card__method--post {
+	color: #e0245e;
+}
+
+.request-card__method--put {
+	color: #2f6fed;
+}
+
+.request-card__method--delete {
+	color: #d92d20;
+}
+
+.request-card__path {
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 13px;
+	color: #14141a;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	flex: 1;
+}
+
+.request-card__time {
+	font-size: 12px;
+	color: #9295a1;
+	flex-shrink: 0;
+}

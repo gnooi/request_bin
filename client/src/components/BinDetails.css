@@ -1,0 +1,163 @@
+/* Values approximated from Bin-Details-Design.png where exact pixels weren't determinable. */
+
+.bin-details-page {
+	min-height: 100vh;
+	background: #f4f5f8;
+	font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+	color: #14141a;
+}
+
+.app-header {
+	display: flex;
+	align-items: center;
+	height: 72px;
+	padding: 0 32px;
+	background: #ffffff;
+	border-bottom: 1px solid #e6e7ec;
+}
+
+.app-header__brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.app-header__logo {
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+	background: #6c4cf0;
+}
+
+.app-header__wordmark {
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.app-header__nav {
+	display: flex;
+	align-items: center;
+	gap: 32px;
+	margin-left: 48px;
+}
+
+.app-header__nav-link {
+	font-size: 15px;
+	font-weight: 500;
+	color: #6b7280;
+	text-decoration: none;
+	padding-bottom: 24px;
+	border-bottom: 2px solid transparent;
+}
+
+.app-header__nav-link--active {
+	color: #6c4cf0;
+	border-bottom-color: #6c4cf0;
+}
+
+.app-header__actions {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-left: auto;
+}
+
+.app-header__icon-button {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	border: 1px solid #e6e7ec;
+	background: #ffffff;
+	color: #6b7280;
+	cursor: pointer;
+}
+
+.bin-details {
+	padding: 32px;
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+.bin-details__card {
+	display: flex;
+	flex-direction: column;
+	background: #ffffff;
+	border: 1px solid #e6e7ec;
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+.bin-details__info {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 24px 32px;
+	border-bottom: 1px solid #e6e7ec;
+}
+
+.bin-details__back {
+	display: block;
+	font-size: 14px;
+	color: #6b7280;
+	text-decoration: none;
+	margin-bottom: 12px;
+	transition: color 0.12s ease;
+}
+
+.bin-details__back:hover {
+	color: #14141a;
+}
+
+.bin-details__title-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.bin-details__title {
+	font-size: 22px;
+	font-weight: 700;
+	margin: 0;
+}
+
+.bin-details__endpoint {
+	display: block;
+	margin-top: 6px;
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 13px;
+	color: #6b7280;
+}
+
+.bin-details__button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 14px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #14141a;
+	background: #ffffff;
+	border: 1px solid #e6e7ec;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.bin-details__button:hover {
+	border-color: #6c4cf0;
+	color: #6c4cf0;
+}
+
+.bin-details__body {
+	display: flex;
+	min-height: 560px;
+}
+
+.bin-details__status {
+	padding: 40px;
+	color: #9295a1;
+	font-size: 14px;
+	font-style: italic;
+	text-align: center;
+	width: 100%;
+}

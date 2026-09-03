@@ -1,0 +1,83 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import binService from "../services/binService.js";
+import { DOMAIN } from "../config.js";
+import BinCreatedModal from "./BinCreatedModal.jsx";
+
+const BIN_NAME_LENGTH = 10;
+const VALID_BIN_NAME = /^[\w\d\-_\.]{1,50}$/;
+
+const generateRandomName = () => {
+	const chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
+	let result = "";
+
+	while (result.length < BIN_NAME_LENGTH) {
+		const randomIndex = Math.floor(Math.random() * chars.length);
+		result += chars[randomIndex];
+	}
+
+	return result;
+};
+
+const isValidBinName = (binName) => {
+	return VALID_BIN_NAME.test(binName);
+}
+
+const NewBin = ({ onBinCreated }) => {
+	const [binName, setBinName] = useState(generateRandomName);
+	const [createdBinName, setCreatedBinName] = useState(null);
+	const navigate = useNavigate();
+
+	const submitBinName = async (event) => {
+		event.preventDefault();
+
+		if (!isValidBinName(binName)) {
+			alert("Bin name must only contain alphanumeric characters.");
+			setBinName(generateRandomName());
+			return;
+		}
+
+		try {
+			await binService.postBin(binName);
+			setCreatedBinName(binName);
+			setBinName(generateRandomName());
+			if (onBinCreated) onBinCreated();
+		} catch (err) {
+			console.error(err);
+			alert(`Failed to create bin: ${binName} - bin already exists`);
+			setBinName(generateRandomName());
+		}
+	};
+
+	return (
+		<div className="card new-bin-card">
+			<h1>New Bin</h1>
+			<p>Create a bin to collect and inspect HTTP reqests.</p>
+			<form id="create_bin" onSubmit={submitBinName}>
+				<label htmlFor="bin_name">
+					<span id="base_uri">
+						{`${DOMAIN}/`}
+					</span>
+					<input
+						id="bin_name"
+						value={binName}
+						onChange={(event) => setBinName(event.target.value)}
+						type="text"
+						placeholder="type a name"
+					/>
+				</label>
+				<button type="submit">Create</button>
+			</form>
+
+			{createdBinName && (
+				<BinCreatedModal
+					binName={createdBinName}
+					onClose={() => setCreatedBinName(null)}
+					onOpenBin={() => navigate(`/bins/${createdBinName}`)}
+				/>
+			)}
+		</div>
+	);
+};
+
+export default NewBin;
