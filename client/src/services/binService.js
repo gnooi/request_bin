@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseURL = "http://localhost:3000/api/bins";
+const baseURL = `${import.meta.env.VITE_API_URL}/api/bins`;
 
 async function getAllBins() {
   const bins = await axios.get(baseURL);

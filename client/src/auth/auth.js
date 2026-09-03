@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
 // hash this? for security
-const TOKEN_KEY = "auth_token";
-const NEW_TOKEN_URL = "http://localhost:3000/api/auth/new";
+const TOKEN_KEY = 'auth_token';
+const NEW_TOKEN_URL = `${import.meta.env.VITE_API_URL}/api/auth/new`;
 
 let tokenPromise = null;
 
@@ -37,7 +37,7 @@ export function bootstrapToken() {
     tokenPromise = issueToken()
       .catch((err) => {
         console.warn(
-          "bootstrapToken: failed to issue auth token, continuing without one",
+          'bootstrapToken: failed to issue auth token, continuing without one',
           err,
         );
         return null;
@@ -80,4 +80,3 @@ async function retryWithFreshToken(error) {
 axios.interceptors.request.use(addAuthHeaderToRequests);
 
 axios.interceptors.response.use(passThroughResponse, retryWithFreshToken);
-

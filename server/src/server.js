@@ -2,8 +2,8 @@ require('dotenv').config({
   path: require('path').resolve(__dirname, '../../.env'),
 });
 
-const http = require('http');
-const { Server } = require('socket.io');
+const http = require('http'); // library that creates a HTTP server
+const { Server } = require('socket.io'); // library that handles events (requests)
 const cron = require('node-cron');
 const { app } = require('./app');
 const { connectPostgres, getPool } = require('./db/postgres');
@@ -16,14 +16,16 @@ const start = async () => {
   await connectPostgres();
   await connectMongo();
 
-  const httpServer = http.createServer(app);
+  const httpServer = http.createServer(app); // creating an HTTP server
 
+  // specifying that the server can accept same resources
   const io = new Server(httpServer, {
     cors: {
       origin: process.env.CLIENT_URL || 'http://localhost:5173',
     },
   });
 
+  // handshake verification of the client using the auth token
   io.use(async (socket, next) => {
     const token = socket.handshake.auth?.token;
     if (!token) return next(new Error('Authorization token missing'));
@@ -47,6 +49,7 @@ const start = async () => {
     }
   });
 
+  // checks when a user visits specific bin page that they are a authorized user
   io.on('connection', (socket) => {
     socket.on('join-bin', async (binName) => {
       try {
@@ -55,7 +58,7 @@ const start = async () => {
           'SELECT user_id FROM bins WHERE bin_name = $1',
           [binName],
         );
-        // if user  doesn't have this bin or
+        // if user doesn't have this bin or
         if (binResult.rows.length === 0) return;
         if (binResult.rows[0].user_id !== socket.userId) return;
 
@@ -66,13 +69,15 @@ const start = async () => {
     });
   });
 
+  // set up server once so we can use in route handlers
   app.set('io', io);
 
+  // starting app
   httpServer.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
   });
 
-  // purges at 3AM every day
+  // cron job purges at 3AM every day
   cron.schedule('0 3 * * *', async () => {
     try {
       await purgeOldRequests();
