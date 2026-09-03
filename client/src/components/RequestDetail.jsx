@@ -8,8 +8,8 @@ const METHOD_CLASS = {
 	DELETE: "request-detail__method--delete",
 };
 
-const parseHeaders = (headersJson) => {
-	return JSON.parse(headersJson);
+const parseHeaders = (headers) => {
+	return typeof headers === "string" ? JSON.parse(headers) : headers;
 };
 
 const formatPayload = (body) => {
@@ -31,8 +31,24 @@ const formatRawRequest = (request, parsedHeaders) => {
 		: `${requestLine}\n${headerLines}`;
 };
 
-const RequestDetail = ({ request }) => {
+const RequestDetail = ({ request, loading = false, error = null }) => {
 	const [activeTab, setActiveTab] = useState("headers");
+
+	if (loading) {
+		return (
+			<section className="bin-details__request-detail" aria-label="Request detail">
+				<p className="request-detail__empty">Loading request details…</p>
+			</section>
+		);
+	}
+
+	if (error) {
+		return (
+			<section className="bin-details__request-detail" aria-label="Request detail">
+				<p className="request-detail__empty">{error}</p>
+			</section>
+		);
+	}
 
 	if (!request) {
 		return (

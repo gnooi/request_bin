@@ -19,16 +19,20 @@ const formatRelativeTime = (receivedAt) => {
 	return `${days}d ago`;
 };
 
-const RequestCard = ({ request, selected = false }) => {
+const RequestCard = ({ request, selected = false, onClick }) => {
 	const { method, path, received_at } = request;
 	const methodClass = METHOD_CLASS[method] ?? "";
 
 	return (
-		<div className={`request-card${selected ? " request-card--selected" : ""}`}>
+		<button
+			className={`request-card${selected ? " request-card--selected" : ""}`}
+			onClick={onClick}
+			type="button"
+		>
 			<span className={`request-card__method ${methodClass}`}>{method}</span>
 			<span className="request-card__path">{path}</span>
 			<span className="request-card__time">{formatRelativeTime(received_at)}</span>
-		</div>
+		</button>
 	)
 };
 

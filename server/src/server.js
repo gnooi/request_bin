@@ -55,7 +55,7 @@ const start = async () => {
           'SELECT user_id FROM bins WHERE bin_name = $1',
           [binName],
         );
-
+        // if user  doesn't have this bin or
         if (binResult.rows.length === 0) return;
         if (binResult.rows[0].user_id !== socket.userId) return;
 

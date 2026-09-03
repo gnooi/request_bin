@@ -23,7 +23,7 @@ async function getAllRequests(endpoint) {
 // get request by id
 async function getRequestById(endpoint, requestId) {
   const request = await axios.get(
-    `${baseURL}/${endpoint}/requests/${requestId}`,
+    `${baseURL}/${endpoint}/requests/${requestId}/raw`,
   );
   return request.data;
 }

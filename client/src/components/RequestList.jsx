@@ -1,7 +1,7 @@
 import "./RequestList.css";
 import RequestCard from "./RequestCard.jsx";
 
-const RequestList = ({ requests, selectedRequestId }) => {
+const RequestList = ({ requests, selectedRequestId, onSelect }) => {
 	return (
 		<section className="bin-details__requests" aria-label="Requests">
 			<input
@@ -17,7 +17,12 @@ const RequestList = ({ requests, selectedRequestId }) => {
 				<button className="method-badge method-badge--delete" type="button">DELETE</button>
 			</div>
 			{requests.map((request) => (
-				<RequestCard key={request.id} request={request} selected={request.id === selectedRequestId} />
+				<RequestCard
+					key={request.id}
+					request={request}
+					selected={request.id === selectedRequestId}
+					onClick={() => onSelect(request.id)}
+				/>
 			))}
 		</section>
 	)
