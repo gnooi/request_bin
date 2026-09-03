@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import binService from "../services/binService.js";
 import { DOMAIN } from "../config.js";
 
@@ -43,7 +44,7 @@ const MyBins = ({ refreshKey }) => {
 					? myBins.map(({ id, bin_name, request_count, created_at }) => {
 						return (
 							<li key={id} className="bin-row">
-								<a href={`${DOMAIN}/bins/${bin_name}/requests`} className="bin-row-main">
+								<Link to={`/bins/${bin_name}`} className="bin-row-main">
 									<div className="bin-row-name">
 										<span className="bin-name">{bin_name}</span>
 										<span className="bin-endpoint">{DOMAIN}/{bin_name}</span>
@@ -56,7 +57,7 @@ const MyBins = ({ refreshKey }) => {
 										<span className="stat-value">{formatRelativeTime(created_at)}</span>
 										<span className="stat-label">Created</span>
 									</div>
-								</a>
+								</Link>
 								<button
 									type="button"
 									className="copy-button"
@@ -64,15 +65,15 @@ const MyBins = ({ refreshKey }) => {
 								>
 									{copiedId === id ? "Copied" : "Copy"}
 								</button>
-								<a
-									href={`${DOMAIN}/bins/${bin_name}/requests`}
+								<Link
+									to={`/bins/${bin_name}`}
 									className="chevron"
 									aria-label={`View ${bin_name}`}
 								>
 									<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 										<path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
 									</svg>
-								</a>
+								</Link>
 							</li>
 						);
 					})

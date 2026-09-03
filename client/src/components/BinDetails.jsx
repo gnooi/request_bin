@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { io } from "socket.io-client";
 import "./BinDetails.css";
 import RequestList from "./RequestList.jsx";
@@ -77,7 +77,7 @@ const BinDetails = () => {
 					<span className="app-header__wordmark">RequestBin</span>
 				</div>
 				<nav className="app-header__nav">
-					<a className="app-header__nav-link app-header__nav-link--active" href="/">Bins</a>
+					<Link className="app-header__nav-link app-header__nav-link--active" to="/">Bins</Link>
 					<a className="app-header__nav-link" href="#">Settings</a>
 				</nav>
 				<div className="app-header__actions">
@@ -89,7 +89,7 @@ const BinDetails = () => {
 				<div className="bin-details__card">
 					<div className="bin-details__info">
 						<div className="bin-details__info-left">
-							<a className="bin-details__back" href="/">← Back to bins</a>
+							<Link className="bin-details__back" to="/">← Back to bins</Link>
 							<div className="bin-details__title-row">
 								<h1 className="bin-details__title">{endpoint}</h1>
 								<button className="bin-details__button" type="button">Copy endpoint</button>
