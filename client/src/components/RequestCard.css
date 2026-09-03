@@ -11,6 +11,11 @@
 	font: inherit;
 	text-align: left;
 	cursor: pointer;
+	transition: background-color 0.12s ease;
+}
+
+.request-card:hover:not(.request-card--selected) {
+	background: #f8f8fa;
 }
 
 .request-card--selected {

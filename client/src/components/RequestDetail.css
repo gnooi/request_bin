@@ -40,20 +40,48 @@
 
 .request-detail__tabs {
 	display: flex;
-	gap: 24px;
+	align-items: center;
+	gap: 4px;
 	border-bottom: 1px solid #e6e7ec;
 	margin-bottom: 16px;
 }
 
+.request-detail__copy {
+	position: absolute;
+	top: 10px;
+	right: 12px;
+	padding: 4px 10px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #9295a1;
+	background: none;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.request-detail__copy:hover {
+	background: #ffffff;
+	color: #14141a;
+}
+
 .request-detail__tab {
-	padding: 0 0 10px;
+	padding: 8px 12px 10px;
 	font-size: 14px;
 	font-weight: 500;
 	color: #9295a1;
 	background: none;
 	border: none;
+	border-radius: 6px 6px 0 0;
 	border-bottom: 2px solid transparent;
 	cursor: pointer;
+	transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.request-detail__tab:hover:not(.request-detail__tab--active) {
+	background: #f8f8fa;
+	color: #14141a;
 }
 
 .request-detail__tab--active {
@@ -62,10 +90,11 @@
 }
 
 .request-detail__panel {
+	position: relative;
 	background: #f8f8fa;
 	border: 1px solid #e6e7ec;
 	border-radius: 8px;
-	padding: 16px 20px;
+	padding: 40px 20px 16px;
 }
 
 .request-detail__headers {

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import NewBin from "./NewBinForm";
 import MyBins from "./MyBins";
+import binService from "../services/binService.js";
+import { getStoredToken, setStoredToken } from "../auth/auth.js";
 
 /*
 
@@ -18,15 +20,50 @@ const request = {
 
 const HomePage = () => {
 	const [refreshKey, setRefreshKey] = useState(0);
+	const [copiedToken, setCopiedToken] = useState(false);
 
 	const handleBinCreated = () => {
 		setRefreshKey((prev) => prev + 1);
+	};
+
+	const copyCurrentToken = async () => {
+		try {
+			await navigator.clipboard.writeText(getStoredToken() ?? "");
+			setCopiedToken(true);
+			setTimeout(() => setCopiedToken(false), 1500);
+		} catch (err) {
+			console.error("Failed to copy token:", err);
+		}
+	};
+
+	const enterExistingToken = async () => {
+		const token = window.prompt("Enter your token:");
+		if (!token) return;
+
+		const previousToken = getStoredToken();
+		setStoredToken(token.trim());
+
+		try {
+			await binService.getAllBins();
+			setRefreshKey((prev) => prev + 1);
+		} catch (err) {
+			setStoredToken(previousToken);
+			alert("Invalid token");
+		}
 	};
 
 	return (
 		<div className="page">
 			<NewBin onBinCreated={handleBinCreated} />
 			<MyBins refreshKey={refreshKey} />
+			<div className="token-actions">
+				<button className="token-actions__button" type="button" onClick={copyCurrentToken}>
+					{copiedToken ? "Copied" : "Copy Current Token"}
+				</button>
+				<button className="token-actions__button" type="button" onClick={enterExistingToken}>
+					Enter Existing Token
+				</button>
+			</div>
 		</div>
 	)
 };

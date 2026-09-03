@@ -63,7 +63,7 @@ const MyBins = ({ refreshKey }) => {
 									className="copy-button"
 									onClick={() => copyEndpoint(id, bin_name)}
 								>
-									{copiedId === id ? "Copied" : "Copy"}
+									{copiedId === id ? "Copied" : "Copy Endpoint"}
 								</button>
 								<Link
 									to={`/bins/${bin_name}`}

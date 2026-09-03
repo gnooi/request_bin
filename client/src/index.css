@@ -265,6 +265,28 @@ body {
 	border-bottom: none;
 }
 
+.token-actions {
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+	opacity: 0.6;
+}
+
+.token-actions__button {
+	border: none;
+	background: none;
+	color: var(--text-secondary);
+	font-size: 12px;
+	font-weight: 400;
+	padding: 4px;
+	cursor: pointer;
+	transition: color 0.12s ease;
+}
+
+.token-actions__button:hover {
+	color: var(--text-primary);
+}
+
 @media (max-width: 480px) {
 	.bin-row-stat {
 		display: none;

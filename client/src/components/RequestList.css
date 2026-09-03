@@ -21,6 +21,13 @@
 	color: #9295a1;
 }
 
+.bin-details__search-empty {
+	margin: 8px 4px;
+	color: #9295a1;
+	font-size: 14px;
+	font-style: italic;
+}
+
 .bin-details__methods {
 	display: flex;
 	flex-wrap: wrap;
@@ -37,12 +44,11 @@
 	background: #ffffff;
 	color: #6b7280;
 	cursor: pointer;
+	transition: background-color 0.12s ease;
 }
 
-.method-badge--active {
-	background: #6c4cf0;
-	border-color: #6c4cf0;
-	color: #ffffff;
+.method-badge:hover:not(.method-badge--active) {
+	background: #f8f8fa;
 }
 
 .method-badge--get {
@@ -63,4 +69,10 @@
 .method-badge--delete {
 	color: #d92d20;
 	border-color: #f9d4d1;
+}
+
+.method-badge--active {
+	background: #6c4cf0;
+	border-color: #6c4cf0;
+	color: #ffffff;
 }
