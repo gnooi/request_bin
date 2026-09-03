@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const baseURL = "http://localhost:3000/api/bins";
 
 async function getAllBins() {
@@ -6,12 +7,10 @@ async function getAllBins() {
   return bins.data;
 }
 
-// Add a try/catch
 async function postBin(endpoint) {
   const addedBin = await axios.post(baseURL, {
     url_endpoint: endpoint,
   });
-
   return addedBin.data;
 }
 

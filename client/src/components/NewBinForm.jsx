@@ -1,8 +1,8 @@
 import { useState } from "react";
 import binService from "../services/binService.js";
+import { DOMAIN } from "../config.js";
 
 const BIN_NAME_LENGTH = 7;
-const DOMAIN = "https://ngrokPointingToLocalHost:3000/"
 const VALID_BIN_NAME = /^[\w\d\-_\.]{1,50}$/;
 
 const generateRandomName = () => {
@@ -21,7 +21,7 @@ const isValidBinName = (binName) => {
 	return VALID_BIN_NAME.test(binName);
 }
 
-const NewBin = () => {
+const NewBin = ({ onBinCreated }) => {
 	const [binName, setBinName] = useState(generateRandomName);
 
 	const submitBinName = async (event) => {
@@ -34,27 +34,24 @@ const NewBin = () => {
 		}
 
 		try {
-			const result = await binService.postBin(binName);
-			// if successful, update my bins sidebar
+			await binService.postBin(binName);
+			setBinName(generateRandomName());
+			if (onBinCreated) onBinCreated();
 		} catch (err) {
 			console.error(err);
 			alert(`Failed to create bin: ${binName} - bin already exists`);
 			setBinName(generateRandomName());
-
-			// May want to be more specific with error handling.
-			//	* if name already exists, use above alert
-			//	* otherwise, specify a network error, etc.
 		}
 	};
 
 	return (
-		<div>
+		<div className="card new-bin-card">
 			<h1>New Bin</h1>
 			<p>Create a bin to collect and inspect HTTP reqests.</p>
 			<form id="create_bin" onSubmit={submitBinName}>
 				<label htmlFor="bin_name">
 					<span id="base_uri">
-						{DOMAIN}
+						{`${DOMAIN}/`}
 					</span>
 					<input
 						id="bin_name"
@@ -66,19 +63,6 @@ const NewBin = () => {
 				</label>
 				<button type="submit">Create</button>
 			</form>
-		</div>
-	);
-};
-
-const Bin = () => {
-
-};
-
-const MyBins = () => {
-	return (
-		<div>
-			<h2>My Bins:</h2>
-			<p></p>
 		</div>
 	);
 };
