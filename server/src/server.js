@@ -72,11 +72,12 @@ const start = async () => {
   // set up server once so we can use in route handlers
   app.set('io', io);
 
+  // starting app
   httpServer.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
   });
 
-  // purges at 3AM every day
+  // cron job purges at 3AM every day
   cron.schedule('0 3 * * *', async () => {
     try {
       await purgeOldRequests();

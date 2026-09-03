@@ -6,7 +6,7 @@ const BIN_NAME_LENGTH = 7;
 const VALID_BIN_NAME = /^[\w\d\-_\.]{1,50}$/;
 
 const generateRandomName = () => {
-	const chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-_.";
+	const chars = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
 	let result = "";
 
 	while (result.length < BIN_NAME_LENGTH) {
