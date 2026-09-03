@@ -19,6 +19,16 @@ const BinDetails = () => {
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState(null);
 
+  const copyEndpoint = async (id, binName) => {
+    try {
+      await navigator.clipboard.writeText(`${DOMAIN}/${binName}`);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 1500);
+    } catch (err) {
+      console.error('Failed to copy endpoint:', err);
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -109,7 +119,11 @@ const BinDetails = () => {
               </Link>
               <div className="bin-details__title-row">
                 <h1 className="bin-details__title">{endpoint}</h1>
-                <button className="bin-details__button" type="button">
+                <button
+                  className="bin-details__button"
+                  type="button"
+                  onClick={() => copyEndpoint(id, bin_name)}
+                >
                   Copy endpoint
                 </button>
               </div>
