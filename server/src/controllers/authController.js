@@ -1,10 +1,11 @@
-// generate a new token
-// create a new user and store that token into the database
-// response with the { token }
-
 const crypto = require('crypto')
 const { getPool } = require('../db/postgres')
 
+/**
+ * Generates a random 32-byte hex token,
+ * creates new user associated with the token
+ * @returns the generated token
+ */
 async function insertUserWithToken() {
     const pool = getPool()
 
@@ -26,6 +27,12 @@ async function insertUserWithToken() {
     throw new Error('Failed to generate unique token')
 }
 
+/**
+ * For first time visiting users -
+ * creates new user, 
+ * responds with status code 201 and 
+ * newly generated token to be stored on browser's localStorage
+ */
 async function createNewUser(req, res) {
     const token = await insertUserWithToken()
     res.status(201).json({token})

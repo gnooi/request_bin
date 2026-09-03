@@ -1,6 +1,10 @@
 const { getPool } = require('../db/postgres');
 const Request = require('../../models/RequestPayload');
 
+/**
+ * Captures a request made to a bin's url endpoint,
+ * stores in databases, updates request count of bin
+ */
 async function recordRequest(req, res) {
   const { bin_name } = req.params;
   const pool = getPool();
@@ -57,6 +61,7 @@ async function recordRequest(req, res) {
       [binId],
     );
 
+    // new request is sent over the web socket connection
     const io = req.app.get('io');
     io.to(bin_name).emit('new-request', {
       id: requestId,
@@ -73,6 +78,9 @@ async function recordRequest(req, res) {
   }
 }
 
+/**
+ * Responds with all requests of a given bin
+ */
 async function getBinRequests(req, res) {
   const { bin_name } = req.params;
   const pool = getPool();
@@ -108,6 +116,9 @@ async function getBinRequests(req, res) {
   }
 }
 
+/**
+ * Returns raw request from mongodb by request id
+ */
 async function getRawRequest(req, res) {
   const { bin_name, id } = req.params;
   const numericId = Number(id);

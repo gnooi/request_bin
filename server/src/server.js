@@ -18,12 +18,14 @@ const start = async () => {
 
   const httpServer = http.createServer(app);
 
+  // instantiating web socket instance
   const io = new Server(httpServer, {
     cors: {
       origin: process.env.CLIENT_URL || 'http://localhost:5173',
     },
   });
 
+  // authorizing requests over the web socket
   io.use(async (socket, next) => {
     const token = socket.handshake.auth?.token;
     if (!token) return next(new Error('Authorization token missing'));
@@ -47,6 +49,7 @@ const start = async () => {
     }
   });
 
+  // starting the web socket connection
   io.on('connection', (socket) => {
     socket.on('join-bin', async (binName) => {
       try {
@@ -68,11 +71,12 @@ const start = async () => {
 
   app.set('io', io);
 
+  // starting app
   httpServer.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
   });
 
-  // purges at 3AM every day
+  // cron job purges at 3AM every day
   cron.schedule('0 3 * * *', async () => {
     try {
       await purgeOldRequests();
