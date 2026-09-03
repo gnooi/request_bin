@@ -61,7 +61,6 @@ async function recordRequest(req, res) {
       [binId],
     );
 
-<<<<<<< HEAD
     // frontend code that hears with socket.emit
     //   useEffect(() => {
     // 	const socket = io(SOCKET_URL, { auth: { token: getStoredToken() } });
@@ -78,9 +77,6 @@ async function recordRequest(req, res) {
     // }, [endpoint]);
 
     // backend code needed for frontend to hear when a request has been successfully captured
-=======
-    // new request is sent over the web socket connection
->>>>>>> c7e90ffbadc3ad9d5bb51c8052b55c9c2f8142f9
     const io = req.app.get('io');
     io.to(bin_name).emit('new-request', {
       id: requestId,
