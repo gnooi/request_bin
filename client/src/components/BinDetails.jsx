@@ -6,8 +6,9 @@ import RequestList from './RequestList.jsx';
 import RequestDetail from './RequestDetail.jsx';
 import binService from '../services/binService.js';
 import { getStoredToken } from '../auth/auth.js';
+import { DOMAIN } from '../config.js';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL;
+const SOCKET_URL = 'http://localhost:3000';
 
 const BinDetails = () => {
   const { endpoint } = useParams();
@@ -18,16 +19,7 @@ const BinDetails = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState(null);
-
-  const copyEndpoint = async (id, binName) => {
-    try {
-      await navigator.clipboard.writeText(`${DOMAIN}/${binName}`);
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 1500);
-    } catch (err) {
-      console.error('Failed to copy endpoint:', err);
-    }
-  };
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -35,7 +27,10 @@ const BinDetails = () => {
 
     binService
       .getAllRequests(endpoint)
-      .then(setRequests)
+      .then((data) => {
+        setRequests(data);
+        setSelectedRequestId(data.length > 0 ? data[0].id : null);
+      })
       .catch(() => setError('Failed to load requests for this bin.'))
       .finally(() => setLoading(false));
   }, [endpoint]);
@@ -81,35 +76,18 @@ const BinDetails = () => {
     };
   }, [endpoint, selectedRequestId]);
 
+  const copyEndpoint = async () => {
+    try {
+      await navigator.clipboard.writeText(`${DOMAIN}/${endpoint}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (err) {
+      console.error('Failed to copy endpoint:', err);
+    }
+  };
+
   return (
     <div className="bin-details-page">
-      <header className="app-header">
-        <div className="app-header__brand">
-          <span className="app-header__logo" aria-hidden="true" />
-          <span className="app-header__wordmark">RequestBin</span>
-        </div>
-        <nav className="app-header__nav">
-          <Link
-            className="app-header__nav-link app-header__nav-link--active"
-            to="/"
-          >
-            Bins
-          </Link>
-          <a className="app-header__nav-link" href="#">
-            Settings
-          </a>
-        </nav>
-        <div className="app-header__actions">
-          <button
-            className="app-header__icon-button"
-            type="button"
-            aria-label="Help"
-          >
-            ?
-          </button>
-        </div>
-      </header>
-
       <main className="bin-details">
         <div className="bin-details__card">
           <div className="bin-details__info">
@@ -122,21 +100,12 @@ const BinDetails = () => {
                 <button
                   className="bin-details__button"
                   type="button"
-                  onClick={() => copyEndpoint(id, bin_name)}
+                  onClick={copyEndpoint}
                 >
-                  Copy endpoint
+                  {copied ? 'Copied' : 'Copy Endpoint'}
                 </button>
               </div>
               <span className="bin-details__endpoint">{endpoint}</span>
-            </div>
-            <div className="bin-details__info-right">
-              <button
-                className="bin-details__button bin-details__button--icon"
-                type="button"
-                aria-label="More options"
-              >
-                ⋯
-              </button>
             </div>
           </div>
 
