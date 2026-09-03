@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import binService from "../services/binService.js";
 import { DOMAIN } from "../config.js";
+import BinCreatedModal from "./BinCreatedModal.jsx";
 
-const BIN_NAME_LENGTH = 7;
+const BIN_NAME_LENGTH = 10;
 const VALID_BIN_NAME = /^[\w\d\-_\.]{1,50}$/;
 
 const generateRandomName = () => {
@@ -23,6 +25,8 @@ const isValidBinName = (binName) => {
 
 const NewBin = ({ onBinCreated }) => {
 	const [binName, setBinName] = useState(generateRandomName);
+	const [createdBinName, setCreatedBinName] = useState(null);
+	const navigate = useNavigate();
 
 	const submitBinName = async (event) => {
 		event.preventDefault();
@@ -35,6 +39,7 @@ const NewBin = ({ onBinCreated }) => {
 
 		try {
 			await binService.postBin(binName);
+			setCreatedBinName(binName);
 			setBinName(generateRandomName());
 			if (onBinCreated) onBinCreated();
 		} catch (err) {
@@ -63,6 +68,14 @@ const NewBin = ({ onBinCreated }) => {
 				</label>
 				<button type="submit">Create</button>
 			</form>
+
+			{createdBinName && (
+				<BinCreatedModal
+					binName={createdBinName}
+					onClose={() => setCreatedBinName(null)}
+					onOpenBin={() => navigate(`/bins/${createdBinName}`)}
+				/>
+			)}
 		</div>
 	);
 };

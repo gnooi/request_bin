@@ -1,15 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./RequestDetail.css";
+import { parseHeaders, formatRawRequest } from "../utils/requestFormat.js";
 
 const METHOD_CLASS = {
 	GET: "request-detail__method--get",
 	POST: "request-detail__method--post",
 	PUT: "request-detail__method--put",
 	DELETE: "request-detail__method--delete",
-};
-
-const parseHeaders = (headers) => {
-	return typeof headers === "string" ? JSON.parse(headers) : headers;
 };
 
 const formatPayload = (body) => {
@@ -20,19 +17,19 @@ const formatPayload = (body) => {
 	}
 };
 
-const formatRawRequest = (request, parsedHeaders) => {
-	const requestLine = `${request.method} ${request.path} HTTP/1.1`;
-	const headerLines = Object.entries(parsedHeaders)
-		.map(([key, value]) => `${key}: ${value}`)
-		.join("\n");
-
-	return request.body
-		? `${requestLine}\n${headerLines}\n\n${request.body}`
-		: `${requestLine}\n${headerLines}`;
+const parseQueryParams = (path) => {
+	const queryIndex = path.indexOf("?");
+	if (queryIndex === -1) return [];
+	return [...new URLSearchParams(path.slice(queryIndex + 1)).entries()];
 };
 
 const RequestDetail = ({ request, loading = false, error = null }) => {
 	const [activeTab, setActiveTab] = useState("headers");
+	const [copied, setCopied] = useState(false);
+
+	useEffect(() => {
+		setCopied(false);
+	}, [activeTab, request]);
 
 	if (loading) {
 		return (
@@ -59,6 +56,32 @@ const RequestDetail = ({ request, loading = false, error = null }) => {
 	}
 
 	const headers = parseHeaders(request.headers);
+	const queryParams = parseQueryParams(request.path);
+
+	const getActiveTabContent = () => {
+		if (activeTab === "headers") {
+			return Object.entries(headers)
+				.map(([key, value]) => `${key}: ${value}`)
+				.join("\n");
+		}
+		if (activeTab === "query") {
+			return queryParams.map(([key, value]) => `${key}: ${value}`).join("\n");
+		}
+		if (activeTab === "payload") {
+			return request.body ? formatPayload(request.body) : "";
+		}
+		return formatRawRequest(request, headers);
+	};
+
+	const copyActiveTab = async () => {
+		try {
+			await navigator.clipboard.writeText(getActiveTabContent());
+			setCopied(true);
+			setTimeout(() => setCopied(false), 1500);
+		} catch (err) {
+			console.error("Failed to copy request detail:", err);
+		}
+	};
 
 	return (
 		<section className="bin-details__request-detail" aria-label="Request detail">
@@ -78,6 +101,13 @@ const RequestDetail = ({ request, loading = false, error = null }) => {
 					Headers
 				</button>
 				<button
+					className={`request-detail__tab${activeTab === "query" ? " request-detail__tab--active" : ""}`}
+					onClick={() => setActiveTab("query")}
+					type="button"
+				>
+					Query Params
+				</button>
+				<button
 					className={`request-detail__tab${activeTab === "payload" ? " request-detail__tab--active" : ""}`}
 					onClick={() => setActiveTab("payload")}
 					type="button"
@@ -94,6 +124,14 @@ const RequestDetail = ({ request, loading = false, error = null }) => {
 			</div>
 
 			<div className="request-detail__panel">
+				<button
+					className="request-detail__copy"
+					onClick={copyActiveTab}
+					type="button"
+				>
+					{copied ? "Copied" : "Copy"}
+				</button>
+
 				{activeTab === "headers" && (
 					<dl className="request-detail__headers">
 						{Object.entries(headers).map(([key, value]) => (
@@ -103,6 +141,21 @@ const RequestDetail = ({ request, loading = false, error = null }) => {
 							</div>
 						))}
 					</dl>
+				)}
+
+				{activeTab === "query" && (
+					queryParams.length > 0
+						? (
+							<dl className="request-detail__headers">
+								{queryParams.map(([key, value], index) => (
+									<div className="request-detail__header-row" key={`${key}-${index}`}>
+										<dt>{key}</dt>
+										<dd>{value}</dd>
+									</div>
+								))}
+							</dl>
+						)
+						: <p className="request-detail__empty">No query parameters sent with this request.</p>
 				)}
 
 				{activeTab === "payload" && (

@@ -101,6 +101,11 @@
 	color: #6b7280;
 	text-decoration: none;
 	margin-bottom: 12px;
+	transition: color 0.12s ease;
+}
+
+.bin-details__back:hover {
+	color: #14141a;
 }
 
 .bin-details__title-row {
@@ -123,12 +128,6 @@
 	color: #6b7280;
 }
 
-.bin-details__info-right {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-}
-
 .bin-details__button {
 	display: inline-flex;
 	align-items: center;
@@ -141,10 +140,12 @@
 	border: 1px solid #e6e7ec;
 	border-radius: 8px;
 	cursor: pointer;
+	transition: border-color 0.12s ease, color 0.12s ease;
 }
 
-.bin-details__button--icon {
-	padding: 8px 12px;
+.bin-details__button:hover {
+	border-color: #6c4cf0;
+	color: #6c4cf0;
 }
 
 .bin-details__body {

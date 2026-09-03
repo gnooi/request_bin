@@ -117,7 +117,7 @@ async function getBinRequests(req, res) {
     }
 
     const requestsResult = await pool.query(
-      `SELECT id, method, path, headers, received_at 
+      `SELECT id, method, path, headers, body, received_at
       FROM requests
       WHERE bin_id = $1
       ORDER BY received_at DESC`,
