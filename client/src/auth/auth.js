@@ -6,6 +6,22 @@ const NEW_TOKEN_URL = "http://localhost:3000/api/auth/new";
 
 let tokenPromise = null;
 
+// bypasses the shared interceptors so a bad candidate token can't be
+// silently swapped for a freshly bootstrapped one, and so it doesn't
+// pick up the currently-stored token instead of the one being tested
+const plainAxios = axios.create();
+
+export async function validateToken(token) {
+  try {
+    await plainAxios.get("http://localhost:3000/api/bins", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 export function getStoredToken() {
   return localStorage.getItem(TOKEN_KEY);
 }

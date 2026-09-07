@@ -1,8 +1,7 @@
 import { useState } from "react";
 import NewBin from "./NewBinForm";
 import MyBins from "./MyBins";
-import binService from "../services/binService.js";
-import { getStoredToken, setStoredToken } from "../auth/auth.js";
+import { getStoredToken, setStoredToken, validateToken } from "../auth/auth.js";
 
 /*
 
@@ -40,16 +39,15 @@ const HomePage = () => {
 		const token = window.prompt("Enter your token:");
 		if (!token) return;
 
-		const previousToken = getStoredToken();
-		setStoredToken(token.trim());
-
-		try {
-			await binService.getAllBins();
-			setRefreshKey((prev) => prev + 1);
-		} catch (err) {
-			setStoredToken(previousToken);
+		const trimmedToken = token.trim();
+		const isValid = await validateToken(trimmedToken);
+		if (!isValid) {
 			alert("Invalid token");
+			return;
 		}
+
+		setStoredToken(trimmedToken);
+		setRefreshKey((prev) => prev + 1);
 	};
 
 	return (
