@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:3000/api/bins";
+const baseURL = "/api/bins";
 
 async function getAllBins() {
   const bins = await axios.get(baseURL);

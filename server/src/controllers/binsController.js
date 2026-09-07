@@ -30,7 +30,7 @@ async function postBin(req, res) {
   // success response
   res.status(201).json({
     'id': addedBin.id,
-    'url_endpoint': addedBin.bin_name,
+    'url_endpoint': `capture/${addedBin.bin_name}`,
   })
 }
 

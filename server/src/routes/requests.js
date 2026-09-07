@@ -9,7 +9,7 @@ const {
 const parseBody = require('../middleware/parseBody');
 
 router.all(
-  '/:bin_name',
+  '/capture/:bin_name',
   express.text({ type: '*/*', limit: '10mb' }),
   parseBody,
   recordRequest,

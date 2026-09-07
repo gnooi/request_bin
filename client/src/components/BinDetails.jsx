@@ -9,7 +9,7 @@ import binService from "../services/binService.js";
 import { getStoredToken } from "../auth/auth.js";
 import { DOMAIN } from "../config.js";
 
-const SOCKET_URL = "http://localhost:3000";
+const SOCKET_URL = window.location.origin;
 
 const BinDetails = () => {
 	const { endpoint } = useParams();

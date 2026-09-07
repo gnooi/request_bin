@@ -2,7 +2,7 @@ import axios from "axios";
 
 // hash this? for security
 const TOKEN_KEY = "auth_token";
-const NEW_TOKEN_URL = "http://localhost:3000/api/auth/new";
+const NEW_TOKEN_URL = "/api/auth/new";
 
 let tokenPromise = null;
 
@@ -13,7 +13,7 @@ const plainAxios = axios.create();
 
 export async function validateToken(token) {
   try {
-    await plainAxios.get("http://localhost:3000/api/bins", {
+    await plainAxios.get("/api/bins", {
       headers: { Authorization: `Bearer ${token}` },
     });
     return true;
