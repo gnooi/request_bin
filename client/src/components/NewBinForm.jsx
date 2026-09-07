@@ -56,7 +56,7 @@ const NewBin = ({ onBinCreated }) => {
 			<form id="create_bin" onSubmit={submitBinName}>
 				<label htmlFor="bin_name">
 					<span id="base_uri">
-						{`${DOMAIN}/`}
+						{`${DOMAIN}/capture/`}
 					</span>
 					<input
 						id="bin_name"
