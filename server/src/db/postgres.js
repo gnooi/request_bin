@@ -8,7 +8,7 @@ function sleep(ms) {
 
 async function connectPostgres(retries = 10, delayMs = 1000) {
   pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: process.env.POSTGRES_URL,
   });
 
   for (let attempt = 1; attempt <= retries; attempt++) {

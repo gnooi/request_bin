@@ -94,3 +94,11 @@ server/
     routes/         Express routers
   models/           Mongoose models
 ```
+## Running w/o docker
+
+- Install postgres and mongo locally
+- Create the user `requestbin` with password
+- Create the database `requestbin` with the owner `requestbin`
+- Load the schema `psql -U requestbin -f server/src/db/schema.sql`
+- update env `POSTGRES_URL: postgresql://user:pass@localhost:5432/dbname`
+- update mongo_uri, replace `mongo` with `localhost`
