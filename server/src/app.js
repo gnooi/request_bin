@@ -11,19 +11,15 @@ const { errorHandler } = require('./middleware/errorHandler.js');
 
 app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
 
-app.get('/', (req, res) => {
-  res.send('Request Bin API');
-});
-
 app.use('/api/auth', authRouter);
 
 app.use('/', requestsRoutes);
 
 app.use('/api/bins', express.json(), authenticate, requestRouter);
 
-app.use(express.static(path.join(__dirname, 'dist')))
+app.use(express.static('dist'))
 
-app.get('*', (req, res) => {
+app.get('/*splat', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
