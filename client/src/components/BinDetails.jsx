@@ -8,6 +8,7 @@ import RequestDetail from "./RequestDetail.jsx";
 import binService from "../services/binService.js";
 import { getStoredToken } from "../auth/auth.js";
 import { DOMAIN } from "../config.js";
+import { copyToClipboard } from "../utils/clipboard.js";
 
 const SOCKET_URL = window.location.origin;
 
@@ -77,7 +78,7 @@ const BinDetails = () => {
 
 	const copyEndpoint = async () => {
 		try {
-			await navigator.clipboard.writeText(`${DOMAIN}/${endpoint}`);
+			await copyToClipboard(`${DOMAIN}/capture/${endpoint}`);
 			setCopied(true);
 			setTimeout(() => setCopied(false), 1500);
 		} catch (err) {
