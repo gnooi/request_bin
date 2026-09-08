@@ -9,6 +9,7 @@ const { authenticate } = require('./middleware/authenticate.js');
 const { errorHandler } = require('./middleware/errorHandler.js');
 
 app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
+app.use(express.static('dist'))
 
 app.get('/', (req, res) => {
   res.send('Request Bin API');

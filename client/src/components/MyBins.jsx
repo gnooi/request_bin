@@ -28,7 +28,7 @@ const MyBins = ({ refreshKey }) => {
 
 	const copyEndpoint = async (id, binName) => {
 		try {
-			await navigator.clipboard.writeText(`${DOMAIN}/${binName}`);
+			await navigator.clipboard.writeText(`${DOMAIN}/capture/${binName}`);
 			setCopiedId(id);
 			setTimeout(() => setCopiedId(null), 1500);
 		} catch (err) {

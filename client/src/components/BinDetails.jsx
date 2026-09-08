@@ -77,7 +77,7 @@ const BinDetails = () => {
 
 	const copyEndpoint = async () => {
 		try {
-			await navigator.clipboard.writeText(`${DOMAIN}/${endpoint}`);
+			await navigator.clipboard.writeText(`${DOMAIN}/capture/${endpoint}`);
 			setCopied(true);
 			setTimeout(() => setCopied(false), 1500);
 		} catch (err) {
