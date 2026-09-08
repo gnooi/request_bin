@@ -17,10 +17,10 @@ app.use('/', requestsRoutes);
 
 app.use('/api/bins', express.json(), authenticate, requestRouter);
 
-app.use(express.static('dist'))
+app.use(express.static(path.join(__dirname, '..', 'dist')))
 
 app.get('/*splat', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
 app.use(errorHandler);
