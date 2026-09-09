@@ -2,14 +2,10 @@ const mongoose = require('mongoose');
 
 const connectMongo = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      tls: true,
-      tlsCAFile: process.env.MONGO_CA_FILE || './global-bundle.pem',
-    });
-
-    console.log('MongoDB/DocumentDB connected');
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('MongoDB connected');
   } catch (err) {
-    console.error('MongoDB/DocumentDB connection error:', err);
+    console.error('MongoDB connection error:', err);
     process.exit(1);
   }
 };

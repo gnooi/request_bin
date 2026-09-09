@@ -17,7 +17,7 @@ const pool = new Pool({
 */
 async function connectPostgres(retries = 10, delayMs = 1000) {
   pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
+    connectionString: process.env.DATABASE_URL,
     ssl: {
       rejectUnauthorized: false
     }
