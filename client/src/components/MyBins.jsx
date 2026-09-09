@@ -26,17 +26,6 @@ const MyBins = ({ refreshKey }) => {
                         .catch(err => console.error("Failed to fetch bins:", err));
         }, [refreshKey]);
 
-<<<<<<< HEAD
-	const copyEndpoint = async (id, binName) => {
-		try {
-			await navigator.clipboard.writeText(`${DOMAIN}/capture/${binName}`);
-			setCopiedId(id);
-			setTimeout(() => setCopiedId(null), 1500);
-		} catch (err) {
-			console.error("Failed to copy endpoint:", err);
-		}
-	};
-=======
         const copyEndpoint = async (id, binName) => {
                 const text = `${DOMAIN}/capture/${binName}`;
                 try {
@@ -59,7 +48,6 @@ const MyBins = ({ refreshKey }) => {
                         console.error("Failed to copy endpoint:", err);
                 }
         };
->>>>>>> origin/ec2-deploy-fixes
 
         return (
                 <div className="card my-bins-card">
