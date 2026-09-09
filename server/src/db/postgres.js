@@ -5,10 +5,22 @@ let pool;
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+/*
 
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+*/
 async function connectPostgres(retries = 10, delayMs = 1000) {
   pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
   });
 
   for (let attempt = 1; attempt <= retries; attempt++) {
