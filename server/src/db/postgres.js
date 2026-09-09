@@ -1,4 +1,5 @@
 const { Pool } = require('pg');
+const fs = require('fs')
 
 let pool;
 
@@ -9,6 +10,11 @@ function sleep(ms) {
 async function connectPostgres(retries = 10, delayMs = 1000) {
   pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
+    // comment out for dev
+    ssl: {
+      ca: fs.readFileSync(process.env.PGSSLROOTCERT).toString(),
+      rejectUnauthorized: true,
+    }
   });
 
   for (let attempt = 1; attempt <= retries; attempt++) {
