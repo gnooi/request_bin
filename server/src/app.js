@@ -13,6 +13,9 @@ app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use('/api/auth', authRouter);
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 app.use('/api/bins', express.json(), authenticate, requestRouter);
 app.use('/', requestsRoutes);
 
