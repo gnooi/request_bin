@@ -14,6 +14,10 @@ router.all(
   parseBody,
   recordRequest,
 );
+// health check
+router.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok' })
+})
 router.get('/api/bins/:bin_name/requests', authenticate, getBinRequests);
 router.get('/api/bins/:bin_name/requests/:id/raw', authenticate, getRawRequest);
 
