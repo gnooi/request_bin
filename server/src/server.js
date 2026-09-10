@@ -9,13 +9,17 @@ const { app } = require('./app');
 const { connectPostgres, getPool } = require('./db/postgres');
 const connectMongo = require('./db/mongo.js');
 const { purgeOldRequests } = require('./jobs/cleanup');
+const { loadConfig } = require('./config/loadConfig');
 
 const PORT = process.env.PORT || 3000;
 
 const start = async () => {
+  const { DATABASE_URL, MONGO_URI } = await loadConfig();
+  process.env.DATABASE_URL = DATABASE_URL;
+  process.env.MONGO_URI = MONGO_URI;
+
   await connectPostgres();
   await connectMongo();
-
   const httpServer = http.createServer(app);
 
   const io = new Server(httpServer, {
