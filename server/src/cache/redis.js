@@ -8,6 +8,7 @@ const subClient = createCluster({
 })
 
 async function connectRedis() {
+    console.log('REDIS_URL at construction time:', process.env.REDIS_URL)
     console.log('Connecting pubClient...');
     await pubClient.connect();
     console.log('pubClient connected');
