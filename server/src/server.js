@@ -9,6 +9,8 @@ const { app } = require('./app');
 const { connectPostgres, getPool } = require('./db/postgres');
 const connectMongo = require('./db/mongo.js');
 const { purgeOldRequests } = require('./jobs/cleanup');
+const { pubClient, subClient, connectRedis } = require('./cache/redis.js')
+const { createAdapter } = require('@socket.io/redis-adapter')
 
 const PORT = process.env.PORT || 3000;
 
@@ -23,6 +25,9 @@ const start = async () => {
       origin: process.env.CLIENT_URL || 'http://localhost:5173',
     },
   });
+
+  await connectRedis()
+  io.adapter(createAdapter(pubClient, subClient))
 
   io.use(async (socket, next) => {
     const token = socket.handshake.auth?.token;
