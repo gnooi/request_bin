@@ -1,13 +1,11 @@
 const { createCluster } = require('redis')
 
 const pubClient = createCluster({
-    rootNodes: [
-        {
-            url: process.env.REDIS_URL
-        }
-    ]
+    rootNodes: [{ url: process.env.REDIS_URL }]
 })
-const subClient = pubClient.duplicate()
+const subClient = createCluster({
+    rootNodes: [{ url: process.env.REDIS_URL }]
+})
 
 async function connectRedis() {
     await Promise.all([pubClient.connect(), subClient.connect()])
