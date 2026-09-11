@@ -26,7 +26,10 @@ const start = async () => {
     },
   });
 
+  console.log('before redis connect')
   await connectRedis()
+  console.log('after redis connect')
+  
   io.adapter(createAdapter(pubClient, subClient))
 
   io.use(async (socket, next) => {
