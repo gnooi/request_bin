@@ -8,7 +8,13 @@ const subClient = createCluster({
 })
 
 async function connectRedis() {
-    await Promise.all([pubClient.connect(), subClient.connect()])
+    console.log('Connecting pubClient...');
+    await pubClient.connect();
+    console.log('pubClient connected');
+
+    console.log('Connecting subClient...');
+    await subClient.connect();
+    console.log('subClient connected');
 }
 
 module.exports = {
